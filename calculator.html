@@ -2,46 +2,51 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calculator</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
+        html, body {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100%;
+            margin: 0; padding: 0;
             background: #0c0c1d;
             font-family: -apple-system, sans-serif;
+            overflow: hidden;
+            -webkit-appearance: none;
+        }
+        .display {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 28%;
+            background: #0c0c1d;
+            padding: 20px 20px 10px;
+            text-align: right;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            padding: 0;
-        }
-        .display {
-            background: #0c0c1d;
-            padding: 30px 24px 20px;
-            text-align: right;
-            flex-shrink: 0;
         }
         .expression {
             color: #888;
-            font-size: 18px;
-            min-height: 24px;
+            font-size: 16px;
+            min-height: 20px;
             word-break: break-all;
         }
         .current {
             color: #fff;
-            font-size: 52px;
+            font-size: 48px;
             font-weight: bold;
             word-break: break-all;
-            margin-top: 8px;
+            margin-top: 5px;
         }
         .buttons {
+            position: absolute;
+            top: 28%; left: 0; right: 0; bottom: 0;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: #1a1a2a;
-            flex: 1;
+            grid-template-rows: repeat(5, 1fr);
+            gap: 2px;
+            background: #111;
         }
         .btn {
             border: none;
@@ -52,11 +57,11 @@
             align-items: center;
             justify-content: center;
             transition: all 0.1s;
-            background: #1e1e2e;
             padding: 0;
             margin: 0;
+            -webkit-tap-highlight-color: transparent;
         }
-        .btn:active { opacity: 0.7; }
+        .btn:active { opacity: 0.6; }
         .num { color: #fff; background: #2d2d3f; }
         .op { color: #fff; background: #ff9f0a; font-size: 26px; }
         .func { color: #aaa; background: #3a3a4f; }
