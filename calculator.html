@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator</title>
     <style>
         html, body {
@@ -18,13 +18,15 @@
         }
         .display {
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 32%;
+            left: 0; right: 0;
+            top: env(safe-area-inset-top, 0px);
+            height: 240px;
             background: #f5f5f5;
-            padding: 30px 24px 20px;
+            padding: 20px 24px 15px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
+            z-index: 1;
         }
         .expression {
             color: #999;
@@ -42,7 +44,7 @@
         }
         .buttons {
             position: absolute;
-            top: 32%; left: 0; right: 0; bottom: 0;
+            top: 240px; left: 0; right: 0; bottom: 0;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(5, 1fr);
@@ -64,36 +66,14 @@
             -webkit-tap-highlight-color: transparent;
             transition: background 0.1s;
         }
-        .btn:active {
-            background: #e0e0e0;
-        }
-        .op {
-            color: #ff9f0a;
-            font-size: 28px;
-            font-weight: 400;
-        }
-        .op:active {
-            background: #f0e0c0;
-        }
-        .func {
-            color: #00897b;
-            font-size: 22px;
-            font-weight: 400;
-        }
-        .func:active {
-            background: #d0e8e4;
-        }
-        .equal {
-            background: #ff9f0a;
-            color: #fff;
-            font-size: 28px;
-        }
-        .equal:active {
-            background: #e8900a;
-        }
-        .zero {
-            grid-column: span 2;
-        }
+        .btn:active { background: #e0e0e0; }
+        .op { color: #ff9f0a; font-size: 28px; }
+        .op:active { background: #f0e0c0; }
+        .func { color: #00897b; font-size: 22px; }
+        .func:active { background: #d0e8e4; }
+        .equal { background: #ff9f0a; color: #fff; font-size: 28px; }
+        .equal:active { background: #e8900a; }
+        .zero { grid-column: span 2; }
     </style>
 </head>
 <body>
@@ -142,7 +122,6 @@
         function addNum(n) {
             if (resetNext) { current = ''; resetNext = false; }
             if (current === '0' && n !== '0') current = n;
-            else if (current === '0' && n === '0') current = '0';
             else if (current === '-0') current = '-' + n;
             else if (current.length < 15) current = current + n;
             updateDisplay();
