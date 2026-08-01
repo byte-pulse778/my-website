@@ -4,7 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
-    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a3e 100%);
+            font-family: -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .calc {
+            background: #1e1e2e;
+            border-radius: 20px;
+            padding: 20px;
+            width: 320px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .display {
+            background: #16161e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: right;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .expression {
+            color: #888;
+            font-size: 16px;
+            min-height: 22px;
+            word-break: break-all;
+        }
+        .current {
+            color: #fff;
+            font-size: 36px;
+            font-weight: bold;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .btn {
+            border: none;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 16px 0;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn:active { transform: scale(0.93); }
+        .num { background: #2d2d3f; color: #fff; }
+        .num:active { background: #3d3d5f; }
+        .op { background: #ff9f0a; color: #fff; }
+        .op:active { background: #ffb340; }
+        .func { background: #3a3a4f; color: #aaa; }
+        .func:active { background: #4a4a6f; }
+        .equal { background: #30d158; color: #fff; }
+        .equal:active { background: #50e070; }
+        .zero { grid-column: span 2; }
+    </style>
 </head>
 <body>
     <div class="calc">
@@ -35,17 +100,78 @@
         </div>
     </div>
     <script>
-        var current='0',expression='',operator=null,prevNum=null,resetNext=false;
-        var dc=document.getElementById('current'),de=document.getElementById('expression');
-        function updateDisplay(){dc.innerText=current;de.innerText=expression;}
-        function addNum(n){if(resetNext){current='';resetNext=false;}current=current==='0'?n:current+n;updateDisplay();}
-        function addDot(){if(resetNext){current='';resetNext=false;}if(current.indexOf('.')===-1)current+='.';updateDisplay();}
-        function setOp(op){if(operator&&!resetNext)calc();prevNum=parseFloat(current);operator=op;var s=op==='*'?'×':op==='/'?'÷':op==='-'?'−':op;expression=prevNum+' '+s;resetNext=true;updateDisplay();}
-        function calc(){if(!operator||prevNum===null)return;var a=prevNum,b=parseFloat(current),r;if(operator==='+')r=a+b;else if(operator==='-')r=a-b;else if(operator==='*')r=a*b;else if(operator==='/'){r=b===0?'Error':a/b;}if(typeof r==='number')r=parseFloat(r.toPrecision(12));expression=a+' '+getSymbol()+' '+b+' =';current=String(r);operator=null;prevNum=null;resetNext=true;updateDisplay();}
-        function getSymbol(){return operator==='+'?'+':operator==='-'?'−':operator==='*'?'×':operator==='/'?'÷':'';}
-        function clearAll(){current='0';expression='';operator=null;prevNum=null;resetNext=false;updateDisplay();}
-        function backspace(){if(resetNext)return;current=current.length===1||(current.length===2&&current[0]==='-')?'0':current.slice(0,-1);updateDisplay();}
-        function percent(){current=String(parseFloat(current)/100);updateDisplay();}
+        var current = '0', expression = '', operator = null, prevNum = null, resetNext = false;
+        var dc = document.getElementById('current');
+        var de = document.getElementById('expression');
+
+        function updateDisplay() {
+            dc.innerText = current;
+            de.innerText = expression;
+        }
+
+        function addNum(n) {
+            if (resetNext) { current = ''; resetNext = false; }
+            current = current === '0' ? n : current + n;
+            updateDisplay();
+        }
+
+        function addDot() {
+            if (resetNext) { current = ''; resetNext = false; }
+            if (current.indexOf('.') === -1) current += '.';
+            updateDisplay();
+        }
+
+        function setOp(op) {
+            if (operator && !resetNext) calc();
+            prevNum = parseFloat(current);
+            operator = op;
+            var s = op === '*' ? '×' : op === '/' ? '÷' : op === '-' ? '−' : op;
+            expression = prevNum + ' ' + s;
+            resetNext = true;
+            updateDisplay();
+        }
+
+        function calc() {
+            if (!operator || prevNum === null) return;
+            var a = prevNum, b = parseFloat(current), r;
+            if (operator === '+') r = a + b;
+            else if (operator === '-') r = a - b;
+            else if (operator === '*') r = a * b;
+            else if (operator === '/') {
+                r = b === 0 ? 'Error' : a / b;
+            }
+            if (typeof r === 'number') r = parseFloat(r.toPrecision(12));
+            expression = a + ' ' + getSymbol() + ' ' + b + ' =';
+            current = String(r);
+            operator = null;
+            prevNum = null;
+            resetNext = true;
+            updateDisplay();
+        }
+
+        function getSymbol() {
+            return operator === '+' ? '+' : operator === '-' ? '−' : operator === '*' ? '×' : operator === '/' ? '÷' : '';
+        }
+
+        function clearAll() {
+            current = '0';
+            expression = '';
+            operator = null;
+            prevNum = null;
+            resetNext = false;
+            updateDisplay();
+        }
+
+        function backspace() {
+            if (resetNext) return;
+            current = current.length === 1 || (current.length === 2 && current[0] === '-') ? '0' : current.slice(0, -1);
+            updateDisplay();
+        }
+
+        function percent() {
+            current = String(parseFloat(current) / 100);
+            updateDisplay();
+        }
     </script>
 </body>
 </html>
