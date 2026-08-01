@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    
+</head>
+<body>
+    <div class="calc">
+        <div class="display">
+            <div class="expression" id="expression"></div>
+            <div class="current" id="current">0</div>
+        </div>
+        <div class="buttons">
+            <button class="btn func" onclick="clearAll()">AC</button>
+            <button class="btn func" onclick="backspace()">⌫</button>
+            <button class="btn func" onclick="percent()">%</button>
+            <button class="btn op" onclick="setOp('/')">÷</button>
+            <button class="btn num" onclick="addNum('7')">7</button>
+            <button class="btn num" onclick="addNum('8')">8</button>
+            <button class="btn num" onclick="addNum('9')">9</button>
+            <button class="btn op" onclick="setOp('*')">×</button>
+            <button class="btn num" onclick="addNum('4')">4</button>
+            <button class="btn num" onclick="addNum('5')">5</button>
+            <button class="btn num" onclick="addNum('6')">6</button>
+            <button class="btn op" onclick="setOp('-')">−</button>
+            <button class="btn num" onclick="addNum('1')">1</button>
+            <button class="btn num" onclick="addNum('2')">2</button>
+            <button class="btn num" onclick="addNum('3')">3</button>
+            <button class="btn op" onclick="setOp('+')">+</button>
+            <button class="btn num zero" onclick="addNum('0')">0</button>
+            <button class="btn num" onclick="addDot()">.</button>
+            <button class="btn equal" onclick="calc()">=</button>
+        </div>
+    </div>
+    <script>
+        var current='0',expression='',operator=null,prevNum=null,resetNext=false;
+        var dc=document.getElementById('current'),de=document.getElementById('expression');
+        function updateDisplay(){dc.innerText=current;de.innerText=expression;}
+        function addNum(n){if(resetNext){current='';resetNext=false;}current=current==='0'?n:current+n;updateDisplay();}
+        function addDot(){if(resetNext){current='';resetNext=false;}if(current.indexOf('.')===-1)current+='.';updateDisplay();}
+        function setOp(op){if(operator&&!resetNext)calc();prevNum=parseFloat(current);operator=op;var s=op==='*'?'×':op==='/'?'÷':op==='-'?'−':op;expression=prevNum+' '+s;resetNext=true;updateDisplay();}
+        function calc(){if(!operator||prevNum===null)return;var a=prevNum,b=parseFloat(current),r;if(operator==='+')r=a+b;else if(operator==='-')r=a-b;else if(operator==='*')r=a*b;else if(operator==='/'){r=b===0?'Error':a/b;}if(typeof r==='number')r=parseFloat(r.toPrecision(12));expression=a+' '+getSymbol()+' '+b+' =';current=String(r);operator=null;prevNum=null;resetNext=true;updateDisplay();}
+        function getSymbol(){return operator==='+'?'+':operator==='-'?'−':operator==='*'?'×':operator==='/'?'÷':'';}
+        function clearAll(){current='0';expression='';operator=null;prevNum=null;resetNext=false;updateDisplay();}
+        function backspace(){if(resetNext)return;current=current.length===1||(current.length===2&&current[0]==='-')?'0':current.slice(0,-1);updateDisplay();}
+        function percent(){current=String(parseFloat(current)/100);updateDisplay();}
+    </script>
+</body>
+</html>
